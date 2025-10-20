@@ -6,6 +6,7 @@ from datetime import datetime, date
 class Patient(db.Model):
     __tablename__ = "patients"
 
+    # Data representation and transfer (DTO)
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date_of_birth = db.Column(db.Date, nullable=False)
@@ -16,11 +17,13 @@ class Patient(db.Model):
 
     creator = db.relationship("User", backref="patients")
 
+    # for debugging/logging purposes
     def __repr__(self):
         return f"<Patient {self.name}>"
 
 # Schemas section
 class PatientCreate(BaseModel):
+    """Data handling and validation"""
     name: str
     date_of_birth: date
     gender: str
@@ -28,6 +31,7 @@ class PatientCreate(BaseModel):
     created_by: int
 
 class PatientResponse(BaseModel):
+    """Patients response model"""
     id: int
     name: str
     date_of_birth: date

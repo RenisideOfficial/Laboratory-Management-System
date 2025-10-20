@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class Test(db.Model):
     __tablename__ = "tests"
 
+    # Data representation and transfer (DTO)
     id = db.Column(db.Integer, primary_key=True)
     test_name = db.Column(db.String(100), nullable=False)
     result = db.Column(db.Text)
@@ -18,16 +19,19 @@ class Test(db.Model):
     patient = db.relationship("Patient", backref="tests")
     performer = db.relationship("User", backref="tests_performed")
 
+    # for debugging/logging purposes
     def __repr__(self):
         return f"<Test {self.test_name} for Patient {self.patient_id}>"
 
 # Schemas section
 class TestCreate(BaseModel):
+    """Data handling and validation"""
     test_name: str
     patient_id: int
     performed_by: int
 
 class TestResponse(BaseModel):
+    """Test response model"""
     id: int
     test_name: str
     result: str | None
