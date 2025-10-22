@@ -1,10 +1,15 @@
+import os
+from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+
+load_dotenv()
 
 db = SQLAlchemy()
 
 def init_db(app):
     """Initialize the database with the Flask app."""
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:password@localhost/lms_db"
+    DB_URL = os.getenv("DATABASE_URL")
+    app.config["SQLALCHEMY_DATABASE_URI"] = DB_URL
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)

@@ -1,4 +1,3 @@
-from flask_sqlalchemy import SQLAlchemy
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from db.db import db
