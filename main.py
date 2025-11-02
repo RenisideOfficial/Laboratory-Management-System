@@ -1,22 +1,28 @@
 from flask import Flask
+from config.config import Config
 from db.db import init_db
-# from app.routes.user_route import user_bp
-# from app.routes.patient_route import patient_bp
-# from app.routes.test_route import test_bp
+from app.middlewares.middleware import register_middlewares
+from app.routes import user_routes, patient_routes, test_routes, result_routes
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(Config)
 
-    # Initialize database
+    # Initialize DB
     init_db(app)
 
-    # Register blueprints
-    # app.register_blueprint(user_bp)
-    # app.register_blueprint(patient_bp)
-    # app.register_blueprint(test_bp)
+    # Register middlewares
+    register_middlewares(app)
+
+    # Register routes
+    app.register_blueprint(user_routes.bp, url_prefix="/api/auth")
+    app.register_blueprint(patient_routes.bp, url_prefix="/api/patients")
+    app.register_blueprint(test_routes.bp, url_prefix="/api/tests")
+    app.register_blueprint(result_routes.bp, url_prefix="/api/results")
 
     return app
 
+
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
