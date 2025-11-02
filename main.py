@@ -11,6 +11,11 @@ def create_app():
     # Initialize DB
     init_db(app)
 
+    # Create all tables
+    from db.db import db
+    with app.app_context():
+        db.create_all()
+
     # Register middlewares
     register_middlewares(app)
 

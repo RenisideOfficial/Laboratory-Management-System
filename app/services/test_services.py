@@ -2,14 +2,15 @@ from flask import jsonify, request
 from db.db import db
 from app.models.test_models import Test
 
-def create_test():
+
+def create_test(user_id):
     """Assign a test to a patient"""
     data = request.get_json()
 
     test = Test(
         test_name=data["test_name"],
         patient_id=data["patient_id"],
-        performed_by=data["performed_by"],
+        performed_by=user_id,  # logged-in user from token
         status=data.get("status", "pending")
     )
 
@@ -19,7 +20,7 @@ def create_test():
     return jsonify({"message": "Test created successfully", "test_id": test.id}), 201
 
 
-def get_tests():
+def get_tests(user_id):
     """Fetch all tests"""
     tests = Test.query.all()
     return jsonify([
@@ -33,7 +34,7 @@ def get_tests():
     ])
 
 
-def get_test(test_id):
+def get_test(user_id, test_id):
     """Fetch a single test"""
     test = Test.query.get(test_id)
     if not test:
@@ -50,7 +51,7 @@ def get_test(test_id):
     })
 
 
-def update_test(test_id):
+def update_test(user_id, test_id):
     """Update a test result or status"""
     test = Test.query.get(test_id)
     if not test:
