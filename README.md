@@ -212,7 +212,7 @@ Run in development mode:
 python app.py
 ```
 
-The API will be available at `http://localhost:5000`
+The API will be available at `http://localhost:8000`
 
 ---
 
