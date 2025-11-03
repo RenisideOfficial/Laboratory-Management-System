@@ -19,7 +19,7 @@ def create_app():
     # Register middlewares
     register_middlewares(app)
 
-    # Register routes
+    # Register all routes
     app.register_blueprint(user_routes.bp, url_prefix="/api/auth")
     app.register_blueprint(patient_routes.bp, url_prefix="/api/patients")
     app.register_blueprint(test_routes.bp, url_prefix="/api/tests")

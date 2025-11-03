@@ -4,4 +4,5 @@ from internal.middlewares.middleware import token_required
 
 bp = Blueprint("result_routes", __name__)
 
+# patient result route
 bp.get("/patient/<int:patient_id>")(token_required(result_services.get_results_by_patient))
