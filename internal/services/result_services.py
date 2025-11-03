@@ -1,5 +1,5 @@
 from flask import jsonify
-from app.models.test_models import Test
+from internal.models.test_models import Test
 
 def get_results_by_patient(user_id, patient_id):
     """Fetch all results for a specific patient"""

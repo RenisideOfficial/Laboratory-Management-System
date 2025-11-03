@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app.services import user_services
+from internal.services import user_services
 
 bp = Blueprint("auth_routes", __name__)
 

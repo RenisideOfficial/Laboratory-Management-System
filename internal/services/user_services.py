@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from db.db import db
-from app.models.user_models import User
+from internal.models.user_models import User
 import jwt
 import datetime
 from config.config import Config

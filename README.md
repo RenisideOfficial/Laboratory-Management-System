@@ -1,218 +1,222 @@
 # 🧪 Laboratory Management System
 
-_A modern backend solution for laboratory operations management_
+_A Flask backend for laboratory test and patient management_
 
 [![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://mysql.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 📋 Overview
 
-The **Laboratory Management System (LMS)** is a robust backend API built with Flask and MySQL, designed to streamline laboratory operations including test management, sample tracking, inventory control, and user management.
-
-## ✨ Features
-
-- **🔬 Test Management** - Create, track, and manage laboratory tests
-- **🧫 Sample Tracking** - End-to-end sample lifecycle management
-- **📊 Results Management** - Record and update test results
-- **👥 User Management** - Role-based access control
-- **📦 Inventory Control** - Manage laboratory supplies and reagents
-- **🔒 RESTful API** - Clean, well-documented endpoints
-- **🗄️ Database Migrations** - Version-controlled schema changes
-- **⚙️ Configurable** - Environment-specific configurations
-
-## 🛠 Tech Stack
-
-- **Backend Framework**: Flask
-- **Database**: MySQL
-- **ORM**: SQLAlchemy
-- **Migrations**: Alembic
-- **Language**: Python 3.7+
-- **API**: RESTful architecture
+A Flask-based Laboratory Management System that provides APIs for managing users, patients, laboratory tests, and test results. Built with MySQL and JWT authentication.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.7 or higher
-- MySQL 8.0 or compatible database
-- pip package manager
+- Python 3.7+
+- MySQL 8.0+
 
 ### Installation
 
-1. **Clone the repository**
+1. **Clone and setup**
 
-   ```bash
-   git clone https://github.com/RenisideOfficial/Laboratory-Management-System.git
-   cd Laboratory-Management-System
-   ```
+```bash
+git clone https://github.com/RenisideOfficial/Laboratory-Management-System.git
+cd Laboratory-Management-System
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+pip install -r requirements.txt
+```
 
-2. **Set up virtual environment**
+2. **Configure database**
 
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   # venv\Scripts\activate  # Windows
-   ```
+```python
+# Update config/config.py with your MySQL credentials
+MYSQL_URL = "mysql+pymysql://username:password@localhost:3306/lab_management"
+```
 
-3. **Install dependencies**
+3. **Initialize database**
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+python db/db.py
+```
 
-4. **Configure environment**
+4. **Run the application**
 
-   ```bash
-   # Copy and edit configuration
-   cp config/example.py config/development.py
-   # Update with your database credentials
-   ```
+```bash
+python app.py
+```
 
-5. **Run database migrations**
+## 📡 API Endpoints
 
-   ```bash
-   alembic upgrade head
-   ```
+### 🔐 Authentication
 
-6. **Start the application**
+- **POST** `/api/auth/register` - Register new user
+- **POST** `/api/auth/login` - User login (returns JWT token)
 
-   ```bash
-   flask run --port=8000
-   # or
-   python main.py --port=8000
-   ```
+### 👥 Patient Management
 
-7. **Verify installation**
-   ```bash
-   curl http://localhost:8000/api/health
-   ```
+- **POST** `/api/patients` - Create new patient
+- **GET** `/api/patients` - Get all patients
+- **GET** `/api/patients/{id}` - Get specific patient
+- **PUT** `/api/patients/{id}` - Update patient details
+- **DELETE** `/api/patients/{id}` - Delete patient
+
+### 🧪 Test Management
+
+- **POST** `/api/tests` - Create new test for patient
+- **GET** `/api/tests` - Get all tests
+- **GET** `/api/tests/{id}` - Get specific test
+- **PUT** `/api/tests/{id}` - Update test results/status
+
+### 📊 Results
+
+- **GET** `/api/patients/{id}/results` - Get all test results for a patient
+
+## 🔐 Authentication
+
+Include JWT token in request headers:
+
+```http
+Authorization: Bearer <your_jwt_token>
+```
 
 ## 📁 Project Structure
 
 ```
 Laboratory-Management-System/
-├── app/                    # Application package
-│   ├── models/            # Database models
-│   ├── routes/            # API routes
-│   ├── services/          # Business logic
-│   └── utils/             # Utility functions
-├── config/                # Configuration files
-│   ├── development.py     # Dev environment config
-│   └── production.py      # Prod environment config
-├── db/                    # Database scripts
-│   └── migrations/        # Alembic migration files
-├── tests/                 # Test suite
-├── main.py               # Application entry point
-├── requirements.txt      # Python dependencies
-└── alembic.ini          # Alembic configuration
+├── app.py                    # Main application
+├── config/
+│   └── config.py             # Configuration
+├── db/
+│   └── db.py                 # Database initialization
+├── internal/
+│   ├── models/
+│   │   ├── user_models.py    # User model
+│   │   ├── patient_models.py # Patient model
+│   │   └── test_models.py    # Test model
+│   ├── routes/
+│   │   ├── user_routes.py    # Authentication endpoints
+│   │   ├── patient_routes.py # Patient-related endpoints
+│   │   ├── test_routes.py    # Test-related endpoints
+│   │   └── user_routes.py    # User-related endpoints
+│   ├── services/
+│   │   ├── user_service.py   # Auth logic (login, register)
+│   │   ├── patient_service.py# Patient-related logic
+│   │   └── test_service.py   # Test-related logic
+│   └── middleware/
+│       ├── middleware.py# JWT or session checks
+├── migrations/               # Database migration scripts (Alembic)
+├── utils/                    # Utility/helper functions
+├── requirements.txt
+├── alembic.ini               # Alembic configuration
+└── README.md
+
+```
+
+## 🗄️ Database Models
+
+### User
+
+- `id`, `full_name`, `email`, `password_hash`, `role`
+- Authentication and authorization
+
+### Patient
+
+- `id`, `name`, `date_of_birth`, `gender`, `contact_info`, `created_by`
+- Patient demographic information
+
+### Test
+
+- `id`, `test_name`, `patient_id`, `status`, `result`, `performed_by`
+- Laboratory test assignments and results
+
+## 📝 Usage Examples
+
+### Register User
+
+```bash
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "full_name": "John Doe",
+    "email": "john@lab.com",
+    "password": "secret123",
+    "role": "doctor"
+  }'
+```
+
+### Create Patient
+
+```bash
+curl -X POST http://localhost:5000/api/patients \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_token>" \
+  -d '{
+    "name": "Alice Smith",
+    "date_of_birth": "1985-05-15",
+    "gender": "Female",
+    "contact_info": "alice@email.com"
+  }'
+```
+
+### Assign Test
+
+```bash
+curl -X POST http://localhost:5000/api/tests \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_token>" \
+  -d '{
+    "test_name": "Blood Count",
+    "patient_id": 1,
+    "status": "pending"
+  }'
+```
+
+### Update Test Result
+
+```bash
+curl -X PUT http://localhost:5000/api/tests/1 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your_token>" \
+  -d '{
+    "result": "Normal",
+    "status": "completed"
+  }'
+```
+
+### Get Patient Results
+
+```bash
+curl -X GET http://localhost:5000/api/patients/1/results \
+  -H "Authorization: Bearer <your_token>"
 ```
 
 ## ⚙️ Configuration
 
-Key environment variables:
+Key settings in `config/config.py`:
 
 ```python
-MYSQL_HOST=localhost
-MYSQL_USER=your_username
-MYSQL_PASSWORD=your_password
-MYSQL_DB=laboratory_db
-FLASK_ENV=development
-SECRET_KEY=your_secret_key
+class Config:
+    MYSQL_URL = "mysql+pymysql://user:pass@localhost:3306/lab_management"
+    SECRET_KEY = "your-secret-key-for-jwt"
 ```
 
-## 📡 API Endpoints
+## 🔧 Development
 
-### Users
-
-- `GET /api/users` - List all users
-- `POST /api/users` - Create new user
-- `GET /api/users/{id}` - Get user details
-- `PUT /api/users/{id}` - Update user
-
-### Tests
-
-- `GET /api/tests` - List laboratory tests
-- `POST /api/tests` - Create new test
-- `GET /api/tests/{id}` - Get test details
-- `PUT /api/tests/{id}` - Update test
-
-### Samples
-
-- `GET /api/samples` - List samples
-- `POST /api/samples` - Create new sample
-- `GET /api/samples/{id}` - Get sample details
-- `PUT /api/samples/{id}` - Update sample status
-
-### Results
-
-- `GET /api/results` - List test results
-- `POST /api/results` - Record new result
-- `PUT /api/results/{id}` - Update result
-
-## 🧪 Development
-
-### Running Tests
+Run in development mode:
 
 ```bash
-pytest tests/
+python app.py
 ```
 
-### Code Formatting
-
-```bash
-black app/ tests/
-flake8 app/ tests/
-```
-
-### Database Operations
-
-```bash
-# Create new migration
-alembic revision --autogenerate -m "description"
-
-# Apply migrations
-alembic upgrade head
-
-# Rollback migration
-alembic downgrade -1
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Authors
-
-- **Reniside** - _Initial work_ - [RenisideOfficial](https://github.com/RenisideOfficial)
-
-## 🙏 Acknowledgments
-
-- Flask community for excellent documentation and examples
-- SQLAlchemy and Alembic teams for robust database tools
-- Contributors and testers
-
----
-
-## 📞 Support
-
-If you have any questions or run into issues, please open an issue on GitHub or contact the development team.
+The API will be available at `http://localhost:5000`
 
 ---
 
 <div align="center">
   
-**Built with ❤️ by [Reniside](https://github.com/RenisideOfficial)**
+**Built by [Reniside](https://github.com/RenisideOfficial)**
 
 </div>

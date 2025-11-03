@@ -1,8 +1,8 @@
 from flask import Flask
 from config.config import Config
 from db.db import init_db
-from app.middlewares.middleware import register_middlewares
-from app.routes import user_routes, patient_routes, test_routes, result_routes
+from internal.middlewares.middleware import register_middlewares
+from internal.routes import user_routes, patient_routes, test_routes, result_routes
 
 def create_app():
     app = Flask(__name__)

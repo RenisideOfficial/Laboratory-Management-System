@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from db.db import db
-from app.models.test_models import Test
+from internal.models.test_models import Test
 
 
 def create_test(user_id):

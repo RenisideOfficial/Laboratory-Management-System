@@ -1,6 +1,6 @@
 from flask import Blueprint
-from app.services import test_services
-from app.middlewares.middleware import token_required
+from internal.services import test_services
+from internal.middlewares.middleware import token_required
 
 bp = Blueprint("test_routes", __name__)
 

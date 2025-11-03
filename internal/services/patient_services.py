@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from db.db import db
-from app.models.patient_models import Patient
+from internal.models.patient_models import Patient
 
 def create_patient(user_id):
     """Add a new patient"""
