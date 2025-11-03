@@ -27,6 +27,7 @@ cd Laboratory-Management-System
 python3 -m venv venv
 source venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
+setup up .env file with DATABASE_URL and SECRET_KEY
 ```
 
 2. **Configure database**
